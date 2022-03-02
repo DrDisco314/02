@@ -1,0 +1,2 @@
+test.exe: BOARD.ASM CS240.asm GAMEPLAY.asm wordle.asm WORD.asm
+	ml BOARD.ASM CS240.asm GAMEPLAY.asm wordle.asm WORD.asm /link irvine16
