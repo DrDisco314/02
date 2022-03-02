@@ -6,6 +6,7 @@ include cs240.inc
 makeBoard proto
 makeSquare proto
 placeWord proto
+rand_word proto
 
 .8086
 
@@ -268,6 +269,8 @@ standardWordle proc
 	add dl,cl
 	inc dl
 	call jumpcursor
+	call rand_word
+	mov bx,dx
 	mov cx,6 				;; buffer size = 6
 	mov dx,offset userWord
 	call readstring240
