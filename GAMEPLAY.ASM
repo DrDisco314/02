@@ -21,6 +21,8 @@ inputWord BYTE "Enter a word:",0
 
 userWord BYTE "      ",0
 
+clearInput BYTE "                   ",0
+
 .code
 
 ;; Runs a game mode
@@ -254,28 +256,46 @@ standardWordle proc
 	pushf
 
 	call makeBoard 			;; Write board
+
 	mov dl,0 				
 	mov dh,23
 	call jumpcursor
-	push dx
 
 	mov dx,offset inputWord ;; Ask user to input a word at 0,23
 	call writestring240
+
+	mov cx,6 	;; run loop 6 times
+	mov bx,1 	;; starting row to place words on
+
+top:
+	
+	push bx
 	mov bx,dx 				;; Store word in bx
 	call strlen 			;; cx = strlen(bx)
+	pop bx
 
-	pop dx
-
+	mov dl,0 				
+	mov dh,23
 	add dl,cl
 	inc dl
-	call jumpcursor
-	call rand_word
-	mov bx,dx
+	call jumpcursor			
+
+	push cx
 	mov cx,6 				;; buffer size = 6
 	mov dx,offset userWord
 	call readstring240
-	mov bx,1
+	pop cx
+
 	call placeWord
+	
+	mov dl,0
+	mov dh,23
+	call jumpcursor
+	mov dx, offset clearInput
+	call writestring240
+
+	inc bx
+	loop top
 
 	popf
 	ret
