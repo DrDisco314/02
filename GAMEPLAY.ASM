@@ -5,6 +5,7 @@ include cs240.inc
 
 makeBoard proto
 makeSquare proto
+placeWord proto
 
 .8086
 
@@ -17,7 +18,7 @@ choiceThree BYTE "Unfortunately, we were unable to implement this :(",0
 
 inputWord BYTE "Enter a word:",0
 
-userWord BYTE "     ",0
+userWord BYTE "      ",0
 
 .code
 
@@ -255,9 +256,23 @@ standardWordle proc
 	mov dl,0 				
 	mov dh,23
 	call jumpcursor
+	push dx
+
 	mov dx,offset inputWord ;; Ask user to input a word at 0,23
+	call writestring240
+	mov bx,dx 				;; Store word in bx
+	call strlen 			;; cx = strlen(bx)
 
+	pop dx
 
+	add dl,cl
+	inc dl
+	call jumpcursor
+	mov cx,6 				;; buffer size = 6
+	mov dx,offset userWord
+	call readstring240
+	mov bx,1
+	call placeWord
 
 	popf
 	ret

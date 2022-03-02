@@ -5,6 +5,8 @@ include cs240.inc
 
 strRowCol proto
 textBox proto
+in_place proto
+inWord proto
 
 .8086
 
@@ -27,6 +29,7 @@ greyBlack = 01110000b   ;; Grey background, black letters
 header BYTE "Wordle!",0
 three word 3
 
+testWord BYTE "crane",0
 
 gameTitle BYTE "CS240 Project 2: Wordle",0
 
@@ -90,18 +93,6 @@ bottomRightCh = 0D9h
 topLeftCh = 0DAh
 topRightCh = 0BFh
 
-;; IN: ah, current char considering
-;;	   cx, 5 - cx = index(char)
-;;	   DX, user word
-;;	   BX, Wordle word
-;; OUT: attrivute of color
-getCharColor proc
-	pushf
-
-	popf
-	ret
-getCharColor endp
-
 
 ;; IN: DX, offset of word to be written
 ;;	   BX, which row of boxes to place word in (BX = 1 -> numRows)
@@ -134,8 +125,9 @@ placeWord proc
 top:
 	call JumpCursor
 	mov al,[si]
-	call getCharColor
-	call BiosWriteChar
+	call writechar240
+	;;call getCharColor
+	;;call BiosWriteChar
 	inc si 			;; move to the next char to be written
 	add dl,3 		;; move cursor to the inside of the next box
 	loop top
@@ -275,14 +267,6 @@ makeBoard endp
 getCharColor proc
     pushf
     push cx
-
-;    push ax
-;    mov ax,5        ;; Set the value of cx to the index
-;    sub ax,cx         ;; of the char within the string by
-;    xchg cx,ax         ;; subtracting the length of 5.
-;    pop ax
-
-
 
     call in_place     ;; Value of the place positions are stored in ah
 
