@@ -257,6 +257,12 @@ standardWordle proc
 
 	call makeBoard 			;; Write board
 
+	mov cx,6 	;; run loop 6 times
+	mov bx,1 	;; starting row to place words on
+
+top:
+	cmp cx,0
+	jz done
 	mov dl,0 				
 	mov dh,23
 	call jumpcursor
@@ -264,19 +270,18 @@ standardWordle proc
 	mov dx,offset inputWord ;; Ask user to input a word at 0,23
 	call writestring240
 
-	mov cx,6 	;; run loop 6 times
-	mov bx,1 	;; starting row to place words on
-
-top:
-	
 	push bx
 	mov bx,dx 				;; Store word in bx
+	push cx
 	call strlen 			;; cx = strlen(bx)
+	mov ax,0
+	mov al,cl
+	pop cx
 	pop bx
 
 	mov dl,0 				
 	mov dh,23
-	add dl,cl
+	add dl,al
 	inc dl
 	call jumpcursor			
 
@@ -295,7 +300,10 @@ top:
 	call writestring240
 
 	inc bx
-	loop top
+	dec cx
+	jmp top
+
+done:
 
 	popf
 	ret

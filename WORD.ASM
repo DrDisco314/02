@@ -186,7 +186,6 @@ wbuffer BYTE "     ",0
 
 .code
 
-;; IN: DX
 ;; OUT: DX offset to a random word from a text file
 rand_word proc
 
@@ -200,8 +199,6 @@ rand_word proc
 	call RandomRange
 	inc ax
 
-
-	;xchg dx,bx
 	xchg ax,si
 
 

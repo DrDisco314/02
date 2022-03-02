@@ -114,14 +114,14 @@ placeWord proc
 	push dx			;; save the coordinates of the cursor
 
 	dec bx 	
-	mov ax,bx 		;; Ensure ax = 0 before we multiply		
+	mov ax,bx 		;; Ensure ax =  before we multiply		
 	mul three		;; desiredRow(char) = 3(bx - 1)
-	add cx,ax 		;; Adjust starting row to desired row
-	mov dh,cl
-	mov ax,0
-
+			 		;; Adjust starting row to desired row
+	
 	mov cx,numBoxes	;; How many times loop should iterate
 	pop dx			;; pop coordinates of the cursor
+	add dh,al
+	mov ax,0
 top:
 	call JumpCursor
 	mov al,[si]
